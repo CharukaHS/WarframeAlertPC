@@ -1,0 +1,23 @@
+{
+  "name": "warframealert",
+  "version": "1.0.0",
+  "description": "Show a desktop notification when an new alert/invasion/dravo_deal starts",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "warframe",
+    "warframe",
+    "alerts"
+  ],
+  "author": "CharukaHS",
+  "license": "ISC",
+  "dependencies": {
+    "node-notifier": "^5.2.1",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "time-stamp": "^2.0.0",
+    "warframe-worldstate-parser": "^2.0.0"
+  }
+}
