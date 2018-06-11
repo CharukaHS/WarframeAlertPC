@@ -1,7 +1,7 @@
 const WorldState = require('warframe-worldstate-parser');
 const url = 'http://content.warframe.com/dynamic/worldState.php';
-//const url = 'E:\\web_learning_projects\\node\\warframeAlert\\dummy.json'
 const request = require('request')
+const opn = require('opn');
 const WindowsToaster = require('node-notifier').WindowsToaster;
 const notifier = new WindowsToaster({
     withFallback: false, // Fallback to Growl or Balloons?
@@ -29,10 +29,12 @@ function getData() {
 
 getData()
 
+
 let Olddravo
 let oldAlerts = []
+let oldNews = []
 
-function test(wf) {    
+function test(wf) {
     //notify todays dravo deal
     if ( Olddravo == undefined) {      
         notifyDravo(wf.dailyDeals[0])
@@ -67,6 +69,27 @@ function test(wf) {
         });
     }
 
+    //news
+    if ( oldNews[0] == undefined) {
+        wf.news.forEach(element => {
+            oldNews.push(element.id)
+        });
+        console.log('oldNews', oldNews);        
+    } else {
+        let newNews = []
+        wf.news.forEach(element => {
+            if(!oldNews.includes(element.id)) {
+                newNews.push(element)
+            }
+        });
+        newNews.forEach(element => {
+            notifyNews(element)
+        });
+        oldNews = []
+        wf.news.forEach(element => {
+            oldNews.push(element.id)
+        });
+    }
 
 
     setTimeout(getData, 2000)
@@ -96,4 +119,21 @@ function notifyAlert(params) {
             wait: true
         }
     )
+}
+
+function notifyNews(params) {
+    console.log('***************new news ', params);
+
+    notifier.notify(
+        {
+            title: params.message,
+            message: `${params.link}`,
+            icon: params.imageLink,
+            sound: true,
+            wait: true
+        }
+    )
+    notifier.on('click', function(notifierObject, options) {
+        opn(params.link);
+      });
 }
